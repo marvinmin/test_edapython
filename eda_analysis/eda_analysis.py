@@ -33,7 +33,7 @@ def generate_report(dataframe,cat_vars,num_vars):
 
 def describe_cat_var(dataframe,cat_vars):
     """
-    This function will take data frame and categorical variable names and will 
+    This function will take dataframe and categorical variable names and will 
     plot the histogram of each categorical variable.
     
     Parameters:
@@ -54,9 +54,41 @@ def describe_cat_var(dataframe,cat_vars):
     'type':['Car','Bus','Car']
     'height':[10,20,30]
     })
-    >>>cat_vars = ['type']
+    >>> cat_vars = ['type']
     >>> describe_cat_variable(X,cat_vars)
        
     """
     # Code 
     
+def describe_num_var(dataframe, num_vars):
+    """ 
+    This function takes dataframe and numeric variable names and provides 
+    statistical summary of the numeric variables for a dataframe.
+    Also, the function plots the histogram of each numeric variable.
+
+    Parameters:
+    -----------
+    dataframe: pandas.DataFrame
+        The dataframe to be inspected.
+    num_vars: list
+        A list of character strings of the names of the numeric variables.
+    
+    Returns:
+    --------
+    tuple(pandas.DataFrame, altair)
+        pandas.DataFrame
+            statistical summary of the numeric variables
+        altair
+            a grid of altair plot containing all histograms
+    
+    Examples:
+    ---------
+    >>> X= pandas.DataFrame({
+    'type':['Car', 'Bus', 'Car']
+    'height':[10, 20, 30]
+    })
+    >>> num_vars = ['type']
+    >>> describe_num_var(X, num_vars)
+      
+    """
+    # Code
