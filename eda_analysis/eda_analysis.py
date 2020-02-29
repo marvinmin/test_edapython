@@ -132,7 +132,7 @@ def describe_num_var(dataframe, num_vars):
     --------
     altair
         A correlogram plot labelled with the correlation coefficients 
-        of -1 to 1 between each numeric column and other numeric columns 
+        of -1 to 1 between each numeric column and other numeric variables
         in the dataframe.
 
     Examples:
