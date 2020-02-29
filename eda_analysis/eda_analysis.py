@@ -118,7 +118,7 @@ def describe_num_var(dataframe, num_vars):
     def calc_cor(dataframe, num_vars):
     """
     This function evaluates the correlation between the numeric 
-    columns of a given dataframe.
+    variables of a given dataframe.
 
 
 	Parameters:
