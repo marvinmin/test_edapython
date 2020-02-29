@@ -1,3 +1,5 @@
+<img src="img/logo.png" width="120" align = "right">
+
 # A Package for Exploratory Data Analysis (eda_analysis)
 
 ![](https://github.com/sweber15/eda_analysis/workflows/build/badge.svg) [![codecov](https://codecov.io/gh/sweber15/eda_analysis/branch/master/graph/badge.svg)](https://codecov.io/gh/sweber15/eda_analysis) ![Release](https://github.com/sweber15/eda_analysis/workflows/Release/badge.svg)
