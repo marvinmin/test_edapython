@@ -33,7 +33,7 @@ def generate_report(dataframe,cat_vars,num_vars):
 
 def describe_cat_var(dataframe,cat_vars):
     """
-    This function will take data frame and categorical variable names and will 
+    This function will take dataframe and categorical variable names and will 
     plot the histogram of each categorical variable.
     
     Parameters:
@@ -62,7 +62,7 @@ def describe_cat_var(dataframe,cat_vars):
     
 def describe_num_var(dataframe, num_vars):
     """ 
-    This function takes data frame and numeric variable names and provides 
+    This function takes dataframe and numeric variable names and provides 
     statistical summary of the numeric variables for a dataframe.
     Also, the function plots the histogram of each numeric variable.
 
