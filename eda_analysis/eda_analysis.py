@@ -31,7 +31,7 @@ def generate_report(dataframe,cat_vars,num_vars):
     
     """
 
-def describe_cat_variable(dataframe,cat_vars):
+def describe_cat_var(dataframe,cat_vars):
     """
     This function will take data frame and categorical variable names and will 
     plot the histogram of each categorical variable.
