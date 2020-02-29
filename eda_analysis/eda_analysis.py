@@ -2,7 +2,8 @@
 
 def generate_report(dataframe,cat_vars,num_vars):
     """
-    This function generates EDA report by plotting graphs and tables
+    This function generates an EDA report by plotting graphs and tables for the 
+    numeric variables, categorical variables, NA values and correlation in a dataframe
     
     Parameters:
     -----------
