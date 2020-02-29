@@ -36,6 +36,7 @@ def generate_report(dataframe,cat_vars,num_vars):
 def describe_na_values(dataframe):
     '''
     describes the na_values in an input pandas dataframe as a 2d array of 1's and 0's.
+
     Parameters
     ----------
     dataframe: Pandas.DataFrame
@@ -113,3 +114,35 @@ def describe_num_var(dataframe, num_vars):
     """
     # Code
 
+
+    def calc_cor(dataframe, num_vars):
+    """
+    This function evaluates the correlation between the numeric 
+    columns of a given dataframe.
+
+
+	Parameters:
+    -----------
+    dataframe: pandas.DataFrame
+        The data frame whose EDA analysis is to be performed.
+    num_vars: list
+        A list of strings of column names containing numeric variables.
+
+    Returns:
+    --------
+    altair
+        A correlogram plot labelled with the correlation coefficients 
+        of -1 to 1 between each numeric column and other numeric columns 
+        in the dataframe.
+
+    Examples:
+    ---------
+    >>> X= pandas.DataFrame({
+    'type':['Car','Bus','Car']
+    'width':[40, 10, 5]
+    'height':[10,20,30]
+    })
+    >>>num_var = ['height', 'width']
+    >>> calc_cor(X, num_vars)    
+    """
+    # Code
