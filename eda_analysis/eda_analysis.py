@@ -62,14 +62,14 @@ def describe_cat_var(dataframe,cat_vars):
     
 def describe_num_var(dataframe, num_vars):
     """ 
-     This function takes data frame and numeric variable names and provides 
+    This function takes data frame and numeric variable names and provides 
     statistical summary of the numeric variables for a dataframe.
     Also, the function plots the histogram of each numeric variable.
 
     Parameters:
     -----------
     dataframe: pandas.DataFrame
-            The dataframe to be inspected.
+        The dataframe to be inspected.
     num_vars: list
         A list of character strings of the names of the numeric variables.
     
@@ -77,7 +77,7 @@ def describe_num_var(dataframe, num_vars):
     --------
     dataframe: pandas.DataFrame
         statistical summary of the numeric variables
-        altair
+    altair
         a grid of altair plot containing all histograms
     
     Examples:
