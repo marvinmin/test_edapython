@@ -1,35 +1,123 @@
-# Contributions and Feedback
-We welcome any feedback, bug reports and/or contributions to this project via the Github Repository! By participating in this project, you agree to abide by our code of conduct.
 
-### Notice bugs or have comments and requests
-If you notice bugs or have comments or requests, please open an issue [here](https://github.com/UBC-MDS/edapython/issues). We'll review the issue within 5 working days.
+## Contributing
 
-### How to make contributions or fix the bugs
-Project members and contributors are expected to follow Github Flow by creating their own branch and submitting a Pull Request to the master branch to make any changes. All code should be written in PEP8 Style and contain tests. 
+Contributions are welcome, and they are greatly appreciated! Every little bit
+helps, and credit will always be given.
 
-Step 1: Clone the GitHub repository:
-- `git clone https://github.com/UBC-MDS/edapython.git`
+You can contribute in many ways:
 
-Step 2: Create a new branch and switch to it:
-- `git checkout -b <branch_name>`
+## Types of Contributions
 
-If you already have an active branch, update it first before you make any changes.
-- `git pull origin master` to pull changes
-- `git checkout  <branch_name>` to checkout branch
-- `git merge master` to merge changes
-- `git push origin <branch>` to push the updated branch to the remote
 
-Step 3: Commit your changes to your branch:
-- `git add 'your changed file'`
-- `git commit -m 'your changed file'`
+### Report Bugs
 
-Step 4: Push the changes to the master branch:
-- `git push origin <branch_name>`
+Report bugs at https://github.com/UBC-MDS/edapython.
 
-Step 5: Submit a pull request (PR) on GitHub asking to merge your branch into the master branch. 
+If you are reporting a bug, please include:
 
-All merges require approval from an admin member. For details on creating a PR, please see GitHub documentation [Creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request). Please write details in the pull request including the motivation and purpose of your commit as well as a description of the changes. We will review the pull requests within 5 working days and you will get feedback in the PR discussion if anything needs to be changed.
+* Your operating system name and version.
+* Any details about your local setup that might be helpful in troubleshooting.
+* Detailed steps to reproduce the bug.
 
-### Attributions
- This Code of Conduct is adapted from the [Factory_bot_rails CONTRIBUTING.md](https://github.com/thoughtbot/factory_bot_rails/blob/master/CONTRIBUTING.md) and DSCI 524 Lecture 1 notes. 
+### Fix Bugs
 
+Look through the GitHub issues for bugs. Anything tagged with "bug" and "help
+wanted" is open to whoever wants to implement it.
+
+### Implement Features
+
+Look through the GitHub issues for features. Anything tagged with "enhancement"
+and "help wanted" is open to whoever wants to implement it.
+
+### Write Documentation
+
+eda_analysis could always use more documentation, whether as part of the
+official eda_analysis docs, in docstrings, or even on the web in blog posts,
+articles, and such.
+
+### Submit Feedback
+
+The best way to send feedback is to file an issue at https://github.com/UBC-MDS/edapython.
+
+If you are proposing a feature:
+
+* Explain in detail how it would work.
+* Keep the scope as narrow as possible, to make it easier to implement.
+* Remember that this is a volunteer-driven project, and that contributions
+  are welcome :)
+
+## Get Started!
+
+Ready to contribute? Here's how to set up `edapython` for local development.
+
+1. Fork the `edapython` repo on GitHub.
+
+2. Clone your fork locally:
+
+	```
+	git clone git@github.com:your_name_here/edapython.git
+	```
+
+3. Install your local copy with Poetry, this is how you set up your fork for local development:
+
+	```
+	cd edapython/
+	poetry install
+	```
+
+4. Create a branch for local development:
+
+	```
+	git checkout -b name-of-your-bugfix-or-feature
+	```
+
+   	Now you can make your changes locally.
+
+5. When you're done making changes, check that your changes pass the tests by running pytest
+
+	```
+	poetry run pytest
+	```
+
+6. Commit your changes and push your branch to GitHub:
+
+	```
+	git add .
+	git commit -m "Your detailed description of your changes."
+	git push origin name-of-your-bugfix-or-feature
+	```
+
+7. Submit a pull request through the GitHub website.
+
+## Pull Request Guidelines
+
+Before you submit a pull request, check that it meets these guidelines:
+
+1. The pull request should include tests.
+2. If the pull request adds functionality, the docs should be updated. Put
+   your new functionality into a function with a docstring, and add the
+   feature to the list in README.md.
+3. The pull request should work for Python 3.7 & 3.8. Check https://github.com/UBC-MDS/edapython/pulls and make sure that the tests pass for all supported Python versions.
+
+## Tips
+
+To run a subset of tests:
+
+```
+py.test tests.test_eda_analysis
+```
+
+## Deploying
+
+A reminder for the maintainers on how to deploy:
+
+- Ensure the following secrets are recorded on GitHub:
+	- CODECOV_TOKEN	
+	- PYPI_USERNAME
+ 	- PYPI_PASSWORD	
+
+ GitHub Actions should build and deploy to testPyPI when a pull request is merged into master.
+
+## Code of Conduct
+
+Please note that the eda_analysis project is released with [this Contributor Code of Conduct](CONDUCT.md). By contributing to this project you agree to abide by its terms.
