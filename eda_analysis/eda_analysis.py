@@ -76,7 +76,7 @@ def describe_num_var(dataframe, num_vars):
     Returns:
     --------
     tuple(pandas.DataFrame, altair)
-        dataframe: pandas.DataFrame
+        pandas.DataFrame
             statistical summary of the numeric variables
         altair
             a grid of altair plot containing all histograms
