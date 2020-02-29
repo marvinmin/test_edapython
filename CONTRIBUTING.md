@@ -11,7 +11,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/sweber15/eda_analysis/issues.
+Report bugs at https://github.com/UBC-MDS/edapython.
 
 If you are reporting a bug, please include:
 
@@ -37,7 +37,7 @@ articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://github.com/sweber15/eda_analysis/issues.
+The best way to send feedback is to file an issue at https://github.com/UBC-MDS/edapython.
 
 If you are proposing a feature:
 
@@ -48,20 +48,20 @@ If you are proposing a feature:
 
 ## Get Started!
 
-Ready to contribute? Here's how to set up `eda_analysis` for local development.
+Ready to contribute? Here's how to set up `edapython` for local development.
 
-1. Fork the `eda_analysis` repo on GitHub.
+1. Fork the `edapython` repo on GitHub.
 
 2. Clone your fork locally:
 
 	```
-	git clone git@github.com:your_name_here/eda_analysis.git
+	git clone git@github.com:your_name_here/edapython.git
 	```
 
 3. Install your local copy with Poetry, this is how you set up your fork for local development:
 
 	```
-	cd eda_analysis/
+	cd edapython/
 	poetry install
 	```
 
@@ -97,7 +97,7 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.md.
-3. The pull request should work for Python 3.7 & 3.8. Check https://github.com/sweber15/eda_analysis/pulls and make sure that the tests pass for all supported Python versions.
+3. The pull request should work for Python 3.7 & 3.8. Check https://github.com/UBC-MDS/edapython/pulls and make sure that the tests pass for all supported Python versions.
 
 ## Tips
 
