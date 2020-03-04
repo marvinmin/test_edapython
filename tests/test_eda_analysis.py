@@ -1,5 +1,31 @@
-from eda_analysis import eda_analysis
+from eda_analysis import eda_analysis as eda
+import numpy as np
+import pandas as pd
 import pytest
+
+def create_data():
+    n = 200 
+    N1 = list(np.random.exponential(3,n))
+    N2 = list(np.random.normal(2,2,n))
+    N3 = list(np.random.normal(10,3,n))
+    C1 = list(np.random.binomial(1,0.7,n))
+    C2 = list(np.random.poisson(1,n))
+    C3 = list(np.random.binomial(5,0.4,n))
+    N1[0] = np.nan
+    C1[0] = "Cat"
+    df = pd.DataFrame({
+        'C1':C1,
+        'C2':C2,
+        'C3':C3,
+        'N1':N1,
+        'N2':N2,
+        'N3':N3   
+    })
+
+    return df
+
+data = create_data()
+num_var = ["N1", "N2", "N3"]
 
 def test_calc_cor():
     """
@@ -12,7 +38,7 @@ def test_calc_cor():
     """
     data = create_data()
     num_var = ["N1", "N2", "N3"]
-    chart = calc_cor(data, num_var)
+    chart = eda.calc_cor(data, num_var)
     
     for i in range(0, len(chart.data)):
         assert chart.data.iloc[i, 2] >= -1, "Out of range values: lower than -1"
@@ -30,7 +56,7 @@ def test_calc_cor():
     assert "altair" in str(type(chart)), "Plot type is not an Altair object"
     
     with pytest.raises(AssertionError, match="Columns are not all numeric"):
-        assert calc_cor(data, ["C1"]), "No error thrown for categorical variables"
+        assert eda.calc_cor(data, ["C1"]), "No error thrown for categorical variables"
         
-    with pytest.raises(AssertionError, match="Input 'df' is not a dataframe"):
-        assert calc_cor(["N1"], ["N1"]), "No error thrown for non-dataframe input"
+    with pytest.raises(AssertionError, match="Input 'dataframe' is not a dataframe"):
+        assert eda.calc_cor(["N1"], ["N1"]), "No error thrown for non-dataframe input"
