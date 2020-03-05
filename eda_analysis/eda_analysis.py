@@ -1,7 +1,10 @@
+import numpy as np
+import pandas as pd
 
 """Perform EDA analysis of the given DataFrame"""
 
-def generate_report(dataframe,cat_vars,num_vars):
+
+def generate_report(dataframe, cat_vars, num_vars):
     """
     This function generates an EDA report by plotting graphs and tables for the 
     numeric variables, categorical variables, NA values and correlation in a dataframe
@@ -31,9 +34,9 @@ def generate_report(dataframe,cat_vars,num_vars):
     >>> describe_cat_variable(X,cat_vars,num_vars)
     
     """
-    
-    
-def describe_na_values(dataframe):
+
+
+def describe_na_values(dataframe: pd.DataFrame):
     '''
     describes the na_values in an input pandas dataframe as a 2d array of 1's and 0's.
     Parameters
@@ -46,11 +49,43 @@ def describe_na_values(dataframe):
     numpy.ndarray
         A 2d Numpy Array of 1's and 0's, corresponding to the value of each entry in the dataframe.
         0 represents an NA value, 1 represents a non-NA value.
-    '''
-    pass    
+    Examples:
+    ---------
+    >>> no_na_dataframe = pd.DataFrame({
+                                    "col_1": [0, 2],
+                                    "col_2": [0.5, 0.1],
+                                    "col_3": ["a", "b"]
+                                    })
+    >>> describe_na_variable(no_na_dataframe)
+    numpy.ndarray([1, 1],
+                  [1, 1],
+                  [1, 1])
 
-  
-def describe_cat_var(dataframe,cat_vars):
+    >>>  na_numerical_dataframe = pd.DataFrame({
+                                           "col_1": [0, 2],
+                                           "col_2": [numpy.nan, 0.1],
+                                           "col_3": ["a", "b"]
+                                           }),
+    >>> describe_na_variable(na_numerical_dataframe)
+    numpy.ndarray([1, 1],
+                  [0, 1],
+                  [1, 1])
+    >>>  na_categorical_dataframe = pd.DataFrame({
+                                           "col_1": [0, 2],
+                                           "col_2": [0.5, 0.1],
+                                           "col_3": [np.nan, "b"]
+                                           }),
+    >>> describe_na_variable(na_numerical_dataframe)
+    numpy.ndarray([1, 1],
+                  [1, 1],
+                  [0, 1])
+
+    '''
+    bool_array = dataframe.isna()
+    return np.array([[0 if val else 1 for val in bool_array[col]] for col in bool_array.columns])
+
+
+def describe_cat_var(dataframe, cat_vars):
     """
     This function will take dataframe and categorical variable names and will 
     plot the histogram of each categorical variable.
@@ -78,8 +113,8 @@ def describe_cat_var(dataframe,cat_vars):
        
     """
     # Code 
-    
-    
+
+
 def describe_num_var(dataframe, num_vars):
     """ 
     This function takes dataframe and numeric variable names and provides 
