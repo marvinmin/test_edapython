@@ -93,6 +93,7 @@ def describe_cat_var(dataframe,cat_vars, n_cols = 3):
     if not isinstance(cat_vars,list) or not all(isinstance(x, str) for x in cat_vars):
         raise Exception("The value of the argument 'cat_vars' must be a list of strings")
     
+    dataframe=dataframe.dropna()
     col_set = set(dataframe.columns)
     col_subset = set(cat_vars)
     if not col_subset.issubset(col_set):

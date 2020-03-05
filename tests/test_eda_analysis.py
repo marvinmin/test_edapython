@@ -30,7 +30,8 @@ def helper_create_data(n = 500):
     C1 = list(np.random.binomial(1,0.7,n))
     C2 = list(np.random.poisson(1,n))
     C3 = list(np.random.binomial(5,0.4,n))
-    C4 = list(np.random.binomial(5,0.4,n))
+    a = ['cat','dog','lion']
+    C4 = list(np.random.choice(a,n))
     df = pd.DataFrame({
         'C1':C1,
         'C2':C2,
