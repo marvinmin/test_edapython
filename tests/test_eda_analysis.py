@@ -1,31 +1,50 @@
 from eda_analysis import eda_analysis as eda
 import numpy as np
 import pandas as pd
+import altair as alt
 import pytest
 
-def create_data():
-    n = 200 
+def helper_create_data(n = 500):
+    """
+    Helper function for creating dataframe for testing
+    
+    Parameters:
+    -----------
+    n: int (default value = 500)
+        Number of rows to be generated for the dataframe
+    
+    Returns:
+    --------
+    pandas.DataFrame
+        Returns a dataframe to be used for testing
+        
+    Examples:
+    ---------
+    >>> helper_create_data()
+    """
     N1 = list(np.random.exponential(3,n))
     N2 = list(np.random.normal(2,2,n))
     N3 = list(np.random.normal(10,3,n))
     C1 = list(np.random.binomial(1,0.7,n))
     C2 = list(np.random.poisson(1,n))
     C3 = list(np.random.binomial(5,0.4,n))
-    N1[0] = np.nan
-    C1[0] = "Cat"
+    a = ['cat','dog','lion']
+    C4 = list(np.random.choice(a,n))
     df = pd.DataFrame({
         'C1':C1,
         'C2':C2,
         'C3':C3,
         'N1':N1,
         'N2':N2,
-        'N3':N3   
+        'N3':N3, 
+        'C4':C4
     })
 
-    return df
+    rows = list(np.random.randint(0,n,20))
+    cols = list(np.random.randint(0,7,5))
+    df.iloc[rows,cols] = np.nan
 
-data = create_data()
-num_var = ["N1", "N2", "N3"]
+    return df
 
 def test_calc_cor():
     """
@@ -36,9 +55,9 @@ def test_calc_cor():
     None
         The test should pass and no asserts should be displayed. 
     """
-    data = create_data()
-    num_var = ["N1", "N2", "N3"]
-    chart = eda.calc_cor(data, num_var)
+    data = helper_create_data()
+    num_vars = ["N1", "N2", "N3"]
+    chart = eda.calc_cor(data, num_vars)
     
     for i in range(0, len(chart.data)):
         assert chart.data.iloc[i, 2] >= -1, "Out of range values: lower than -1"
@@ -55,8 +74,26 @@ def test_calc_cor():
     
     assert "altair" in str(type(chart)), "Plot type is not an Altair object"
     
-    with pytest.raises(AssertionError, match="Columns are not all numeric"):
-        assert eda.calc_cor(data, ["C1"]), "No error thrown for categorical variables"
-        
-    with pytest.raises(AssertionError, match="Input 'dataframe' is not a dataframe"):
-        assert eda.calc_cor(["N1"], ["N1"]), "No error thrown for non-dataframe input"
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ["C4"])
+    assert str(e.value) == "Columns are not all numeric"
+    
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(["N1"], ["N1"])
+    assert str(e.value) == "Input 'dataframe' is not a dataframe"
+
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ['N1', 1])
+    assert str(e.value) == "The value of the argument 'num_vars' should be a list of strings."
+
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, 'N1')
+    assert str(e.value) == "The value of the argument 'num_vars' should be a list of strings."
+
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ['N1', 'N1'])
+    assert str(e.value) == "The elements in the argument 'num_vars' should be unique."
+
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ["N1", "abc"])
+    assert str(e.value) == "The argument 'num_vars' should be a subset of the column names from the dataframe."

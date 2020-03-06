@@ -1,4 +1,3 @@
-
 import pandas as pd
 import numpy as np
 import altair as alt
@@ -111,15 +110,15 @@ def describe_num_var(dataframe, num_vars):
     >>> X= pandas.DataFrame({
     'type':['Car', 'Bus', 'Car']
     'height':[10, 20, 30]
+    'width':[12, 15, 11]
     })
-    >>> num_vars = ['type']
+    >>> num_vars = ['height', 'width']
     >>> describe_num_var(X, num_vars)
       
     """
-    # Code
+    # Code 
 
-
-def calc_cor(dataframe, num_var):
+def calc_cor(dataframe, num_vars):
     """
     This function evaluates the correlation between the numeric 
     variables of a given dataframe.
@@ -130,7 +129,7 @@ def calc_cor(dataframe, num_var):
     dataframe: pandas.DataFrame
         The data frame whose EDA analysis is to be performed.
     num_var: list
-        A list of strings of column names containing numeric variables.
+        A list of unique strings of column names containing numeric variables.
 
     Returns:
     --------
@@ -150,13 +149,27 @@ def calc_cor(dataframe, num_var):
     >>> calc_cor(X, num_vars)    
     """
     # Test input 'dataframe' is a dataframe
-    assert isinstance(dataframe, pd.DataFrame), "Input 'dataframe' is not a dataframe"
+    if not isinstance(dataframe, pd.DataFrame):
+        raise Exception("Input 'dataframe' is not a dataframe")
+        
+    # Check the num_vars input should be a list of strings
+    if not (all(isinstance(item, str) for item in num_vars) & isinstance(num_vars, list)):
+        raise Exception("The value of the argument 'num_vars' should be a list of strings.")
+        
+    # Check if the num_vars input contains only the column names
+    if not all(item in dataframe.columns for item in num_vars):
+        raise Exception("The argument 'num_vars' should be a subset of the column names from the dataframe.")
     
-    df_num = dataframe.loc[:, num_var]
+    for i in num_vars:
+        if not np.issubdtype(dataframe[i].dtype, np.number):
+          raise Exception("Columns are not all numeric")
+
+    # Check if the elements in the num_vars input are unique
+    if len(num_vars) != len(set(num_vars)):
+        raise Exception("The elements in the argument 'num_vars' should be unique.")
+        
+    df_num = dataframe.loc[:, num_vars]
     df_num = df_num.dropna()
-    
-    for i in num_var:
-        assert np.issubdtype(dataframe[i].dtype, np.number), "Columns are not all numeric"
 
     df_corr = round(df_num.corr(method='pearson'), 2)
     
@@ -191,5 +204,4 @@ def calc_cor(dataframe, num_var):
     )
 
     corr_chart = heatmap + text
-
     return corr_chart
