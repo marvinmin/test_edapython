@@ -1,4 +1,8 @@
 
+import pandas as pd
+import numpy as np
+import altair as alt
+
 """Perform EDA analysis of the given DataFrame"""
 
 def generate_report(dataframe,cat_vars,num_vars):
@@ -92,7 +96,7 @@ def describe_num_var(dataframe, num_vars):
     dataframe: pandas.DataFrame
         The dataframe to be inspected.
     num_vars: list
-        A list of character strings of the names of the numeric variables.
+        A list of unique character strings of the names of the numeric variables.
     
     Returns:
     --------
@@ -107,12 +111,69 @@ def describe_num_var(dataframe, num_vars):
     >>> X= pandas.DataFrame({
     'type':['Car', 'Bus', 'Car']
     'height':[10, 20, 30]
+    'width':[12, 15, 11]
     })
-    >>> num_vars = ['type']
-    >>> describe_num_var(X, num_vars)
+    >>> num_vars = ['height', 'width']
+    >>> summary, plot = describe_num_var(X, num_vars)
+    >>> summary
+    >>> plot
       
     """
-    # Code
+    # Check the dataframe input
+    if not isinstance(dataframe, pd.DataFrame):
+        raise Exception("The value of the argument 'dataframe' should be of type pandas dataframe.")
+    
+    # Check the num_vars input should be a list of strings
+    if not (all(isinstance(item, str) for item in num_vars) & isinstance(num_vars, list)):
+        raise Exception("The value of the argument 'num_vars' should be a list of strings.")
+    
+    # Check if the elements in the num_vars input are unique
+    if len(num_vars) != len(set(num_vars)):
+        raise Exception("The elements in the argument 'num_vars' should be unique.")
+
+    # Check if the num_vars input contains only the column names
+    if not all(item in dataframe.columns for item in num_vars):
+        raise Exception("The argument 'num_vars' should be a subset of the column names from the dataframe.")
+    
+    # Subset and transpose the dataframe for later use 
+    df = pd.DataFrame(dataframe[num_vars]).T
+    
+    # Check if only the numeric columns are selected
+    if not np.issubdtype(df.to_numpy().dtype, np.number):
+        raise Exception("Only numeric columns expected, please check the input.")
+
+    # Calculate the statistical summaries
+    stat_funs = [np.nanmin, np.nanmax, np.nanmedian, np.nanmean, np.nanstd]
+    temp = []
+    for fun in stat_funs:
+        data_stat = df.apply(fun, axis=1)
+        temp.append(data_stat)
+
+    temp_df = pd.DataFrame(temp)
+    quantiles_df = pd.DataFrame([np.nanquantile(df, 0.25, axis = 1), 
+                                 np.nanquantile(df, 0.75, axis = 1)])
+    quantiles_df.columns = num_vars
+
+    summary = pd.concat([quantiles_df, temp_df])
+    
+    # Change the index more readable
+    summary.index = ["25%", "75%", "min", "max", "median", "mean", "sd"]
+    
+    # Make the histogram
+    df_to_plot = df.T.melt().dropna()
+    plot = alt.Chart(df_to_plot).mark_bar().encode(
+        alt.X("value:Q", bin=alt.Bin(maxbins=30), title = "Value"),
+        y='count()'
+    ).properties(
+        width=300,
+        height=300,
+        title='Histogram of Numeric Variables'
+    ).facet(
+        facet='variable:N',
+        columns=3
+        )
+    
+    return summary, plot
 
 
     def calc_cor(dataframe, num_vars):
