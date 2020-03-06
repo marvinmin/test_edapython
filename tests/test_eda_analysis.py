@@ -72,7 +72,7 @@ def test_describe_num_var():
     
     with pytest.raises(Exception) as e:
         assert eda.describe_num_var(test_data, ['N1', 'abc'])
-    assert str(e.value) == "The argument 'num_vars' should be a subset of the column names of the dataframe."
+    assert str(e.value) == "The argument 'num_vars' should be a subset of the column names from the dataframe."
     
     with pytest.raises(Exception) as e:
         assert eda.describe_num_var(test_data, ['N1', 'C1'])
