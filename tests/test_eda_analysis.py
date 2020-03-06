@@ -3,29 +3,50 @@ import numpy as np
 import pandas as pd
 import pytest
 
-def create_data():
-    n = 200 
+def helper_create_data(n = 500):
+    """
+    Helper function for creating dataframe for testing
+    
+    Parameters:
+    -----------
+    n: int (default value = 500)
+        Number of rows to be generated for the dataframe
+    
+    Returns:
+    --------
+    pandas.DataFrame
+        Returns a dataframe to be used for testing
+        
+    Examples:
+    ---------
+    >>> helper_create_data()
+    """
     N1 = list(np.random.exponential(3,n))
     N2 = list(np.random.normal(2,2,n))
     N3 = list(np.random.normal(10,3,n))
     C1 = list(np.random.binomial(1,0.7,n))
     C2 = list(np.random.poisson(1,n))
     C3 = list(np.random.binomial(5,0.4,n))
-    N1[0] = None
-    C1[0] = "Cat"
+    a = ['cat','dog','lion']
+    C4 = list(np.random.choice(a,n))
     df = pd.DataFrame({
         'C1':C1,
         'C2':C2,
         'C3':C3,
         'N1':N1,
         'N2':N2,
-        'N3':N3   
+        'N3':N3, 
+        'C4':C4
     })
+
+    rows = list(np.random.randint(0,n,20))
+    cols = list(np.random.randint(0,7,5))
+    df.iloc[rows,cols] = np.nan
 
     return df
 
 def test_describe_num_var():
-    test_data = create_data()
+    test_data = helper_create_data()
     test_col = test_data['N1']
     summary, plot = eda.describe_num_var(test_data, ['N1', 'N2'])
     
@@ -75,5 +96,5 @@ def test_describe_num_var():
     assert str(e.value) == "The argument 'num_vars' should be a subset of the column names from the dataframe."
     
     with pytest.raises(Exception) as e:
-        assert eda.describe_num_var(test_data, ['N1', 'C1'])
+        assert eda.describe_num_var(test_data, ['N1', 'C4'])
     assert str(e.value) == "Only numeric columns expected, please check the input."

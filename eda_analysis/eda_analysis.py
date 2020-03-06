@@ -114,7 +114,9 @@ def describe_num_var(dataframe, num_vars):
     'width':[12, 15, 11]
     })
     >>> num_vars = ['height', 'width']
-    >>> describe_num_var(X, num_vars)
+    >>> summary, plot = describe_num_var(X, num_vars)
+    >>> summary
+    >>> plot
       
     """
     # Check the dataframe input
@@ -158,7 +160,8 @@ def describe_num_var(dataframe, num_vars):
     summary.index = ["25%", "75%", "min", "max", "median", "mean", "sd"]
     
     # Make the histogram
-    plot = alt.Chart(df.T.melt().dropna()).mark_bar().encode(
+    df_to_plot = df.T.melt().dropna()
+    plot = alt.Chart(df_to_plot).mark_bar().encode(
         alt.X("value:Q", bin=alt.Bin(maxbins=30), title = "Value"),
         y='count()'
     ).properties(
