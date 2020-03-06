@@ -131,7 +131,7 @@ def describe_num_var(dataframe, num_vars):
 
     # Check if the num_vars input contains only the column names
     if not all(item in dataframe.columns for item in num_vars):
-        raise Exception("The argument 'num_vars' should be a subset of the column names of the dataframe.")
+        raise Exception("The argument 'num_vars' should be a subset of the column names from the dataframe.")
     
     # Subset and transpose the dataframe for later use 
     df = pd.DataFrame(dataframe[num_vars]).T
