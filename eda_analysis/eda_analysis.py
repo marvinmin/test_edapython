@@ -36,6 +36,44 @@ def generate_report(dataframe, cat_vars, num_vars):
     >>> describe_cat_variable(X,cat_vars,num_vars)
     
     """
+    try:
+        na_df = describe_na_values(dataframe)
+        na_data = na_df.values
+        na_report = pd.DataFrame(data = np.sum(na_data!=1,axis=1),index = list(dataframe.columns))
+        print("Number of NA values in each column")
+        print(na_report)
+        
+        print(' ')
+        print('Categorical variable histogram')
+        cat_var_plot = describe_cat_var(dataframe,cat_vars)
+        cat_var_plot.display()
+        
+       
+        num_var_desc,num_var_plot = describe_num_var(dataframe, num_vars)
+        print(' ')
+        print('Numerical variable histogram')
+        num_var_plot.display()
+        
+        print(' ')
+        print('Numerical variable summary')
+        print(num_var_desc)
+        
+        print(' ')
+        print('Correlation plot of numerical variable')    
+        cor_plot = calc_cor(dataframe, num_vars)
+        cor_plot.display()
+        
+        return True
+    
+    except Exception as ex:
+        
+        print("The report was not generated successfully")
+        print(ex)
+        return False
+    
+    
+    
+    
 
 
 def describe_na_values(dataframe: pd.DataFrame):
@@ -52,6 +90,7 @@ def describe_na_values(dataframe: pd.DataFrame):
     numpy.ndarray
         A 2d Numpy Array of 1's and 0's, corresponding to the value of each entry in the dataframe.
         0 represents an NA value, 1 represents a non-NA value.
+	
     Examples:
     ---------
     >>> no_na_dataframe = pd.DataFrame({

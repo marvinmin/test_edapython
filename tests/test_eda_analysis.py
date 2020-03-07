@@ -49,8 +49,36 @@ def helper_create_data(n = 500):
     
     return df
 
+def test_generate_report():
+    """
+    Tests the generate_report function to make sure the outputs are correct.
+    Returns:
+    --------
+    None
+        The test should pass and no asserts should be displayed. 
+    """
+    #Calling helper function to create data
+    data = helper_create_data()
+    cat_vars = ['C1','C2','C3','C4']
+    num_vars = ['N1','N2','N3']
+    
+    # Positive test case: Checking whether the function runs properly or not
+    assert eda.generate_report(data,cat_vars,num_vars), "Expected True but False returned"
+    
+    # Negative test case: Checking whether the function returns False fr wrong output
+    assert not eda.generate_report(data,cat_vars,"String Input"), "Expected False but True returned"
+    
+    
+
 
 def test_describe_cat_var():
+    """
+    Tests the describe_cat_var function to make sure the outputs are correct.
+    Returns:
+    --------
+    None
+        The test should pass and no asserts should be displayed. 
+    """
     #Calling helper function to create data
     data = helper_create_data()
     cat_vars = ['C1','C2','C3','C4']
@@ -175,6 +203,13 @@ def test_calc_cor():
 
 # noinspection PyBroadException
 def test_describe_na_value():
+    """
+    Tests the test_describe_na_value function to make sure the outputs are correct.
+    Returns:
+    --------
+    None
+        The test should pass and no asserts should be displayed. 
+    """
     no_na_dataframe = pd.DataFrame({"col_1": [0, 2],
                                     "col_2": [0.5, 0.1],
                                     "col_3": ["a", "b"]})
