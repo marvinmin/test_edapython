@@ -46,6 +46,13 @@ def helper_create_data(n = 500):
     return df
 
 def test_describe_num_var():
+    """
+    Tests the describe_num_var function to make sure the outputs are correct.
+    Returns:
+    --------
+    None
+        The test should pass and no asserts should be displayed. 
+    """
     # Generate test data from the helper function.
     test_data = helper_create_data()
     test_col = test_data['N1']
