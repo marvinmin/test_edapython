@@ -51,6 +51,13 @@ def helper_create_data(n=500):
 
 # noinspection PyBroadException
 def test_describe_na_value():
+    """
+    Tests the test_describe_na_value function to make sure the outputs are correct.
+    Returns:
+    --------
+    None
+        The test should pass and no asserts should be displayed. 
+    """
     no_na_dataframe = pd.DataFrame({"col_1": [0, 2],
                                     "col_2": [0.5, 0.1],
                                     "col_3": ["a", "b"]})
