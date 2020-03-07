@@ -74,7 +74,22 @@ def test_describe_cat_var():
         assert False,'Exception must be thorwn for this test case'
     except Exception as ex:
         assert "The input categorical column names must belong to the dataframe" == str(ex), 'Expected exception not thrown'
-    
+
+    #Testing non-zero input is being passed to n_col
+    try:
+        eda.describe_cat_var(data,cat_vars,0)
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'n_cols' must be a positive non zero integer" == str(ex), 'Expected exception not thrown'
+   
+    #testing integer is passed to n_col
+    try:
+        eda.describe_cat_var(data,cat_vars,"z")
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'n_cols' must be a positive non zero integer" == str(ex), 'Expected exception not thrown'
+        
+        
     #Testing type of returned value
     p = eda.describe_cat_var(data,cat_vars)
     assert isinstance(p,alt.vegalite.v3.api.VConcatChart),'The function must return an altair plot'

@@ -1,13 +1,8 @@
 
-import pandas as pd
-import numpy as np
-import altair as alt
-
 """Perform EDA analysis of the given DataFrame"""
-
 import pandas as pd
-import altair as alt
 import numpy as np
+import altair as alt
 import pytest
 
 def generate_report(dataframe,cat_vars,num_vars):
@@ -96,6 +91,9 @@ def describe_cat_var(dataframe,cat_vars, n_cols = 3):
     
     if not isinstance(cat_vars,list) or not all(isinstance(x, str) for x in cat_vars):
         raise Exception("The value of the argument 'cat_vars' must be a list of strings")
+        
+    if not isinstance(n_cols,int) or n_cols<=0:
+        raise Exception("The value of the argument 'n_cols' must be a positive non zero integer")
     
     dataframe=dataframe.dropna()
     col_set = set(dataframe.columns)
