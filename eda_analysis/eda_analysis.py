@@ -89,6 +89,7 @@ def describe_na_values(dataframe: pd.DataFrame):
     numpy.ndarray
         A 2d Numpy Array of 1's and 0's, corresponding to the value of each entry in the dataframe.
         0 represents an NA value, 1 represents a non-NA value.
+	
     Examples:
     ---------
     >>> no_na_dataframe = pd.DataFrame({
