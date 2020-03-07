@@ -24,7 +24,7 @@ pip install -i https://test.pypi.org/simple/ eda_analysis
 
 ### Features
 
-1. `calc_cor`: This function will take in data frame and will plot correlation matrix of the features
+1. `calc_cor`: This function will take in dataframe and will plot correlation matrix of the features
 2. `describe_na_values` : This function will take in data frame and will plot heat map to locate NA values in each feature and will also give a table listing number of NA values in each feature.
 3. `describe_cat_var`: This function will take data frame and categorical variable names and will plot the histogram of each categorical variable
 4. `describe_num_var`: This function will take data frame and numerical variable names and will plot the histogram of each numerical variable.
@@ -32,11 +32,20 @@ pip install -i https://test.pypi.org/simple/ eda_analysis
 
 ### Dependencies
 
-- TODO
+- python = ^3.7
+- pandas = ^1.0.1
+- numpy = ^1.18.1
+- altair = ^4.0.1
+- pytest-cov = ^2.8.1
+- sphinx = ^2.4.4
+- sphinxcontrib-napoleon = ^0.7
+- poetry>=0.12
 
 ### Usage
 
-- TODO
+To use eda_analysis in a project::
+
+    from eda_analysis import eda_analysis
 
 ### Documentation
 The official documentation is hosted on Read the Docs: <https://edapython.readthedocs.io/en/latest/>
