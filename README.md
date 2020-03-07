@@ -42,6 +42,8 @@ pip install -i https://test.pypi.org/simple/ eda_analysis
 To use eda_analysis in a project::
 
     from eda_analysis import eda_analysis
+    
+Visit our [read the docs page](https://edapython.readthedocs.io/en/latest/source/eda_analysis.html#module-eda_analysis) to see individual function usage.
 
 ### Documentation
 The official documentation is hosted on Read the Docs: <https://edapython.readthedocs.io/en/latest/>
