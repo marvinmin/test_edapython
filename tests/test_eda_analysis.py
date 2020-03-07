@@ -1,10 +1,11 @@
-from eda_analysis import eda_analysis as eda
+import altair as alt
 import numpy as np
 import pandas as pd
-import altair as alt
 import pytest
+from eda_analysis import eda_analysis as eda
 
-def helper_create_data(n = 500):
+
+def helper_create_data(n=500):
     """
     Helper function for creating dataframe for testing
     
@@ -22,31 +23,31 @@ def helper_create_data(n = 500):
     ---------
     >>> helper_create_data()
     """
-    N1 = list(np.random.exponential(3,n))
-    N2 = list(np.random.normal(2,2,n))
-    N3 = list(np.random.normal(10,3,n))
-    C1 = list(np.random.binomial(1,0.7,n))
-    C2 = list(np.random.poisson(1,n))
-    C3 = list(np.random.binomial(5,0.4,n))
-    a = ['cat','dog','lion']
-    C4 = list(np.random.choice(a,n))
+    N1 = list(np.random.exponential(3, n))
+    N2 = list(np.random.normal(2, 2, n))
+    N3 = list(np.random.normal(10, 3, n))
+    C1 = list(np.random.binomial(1, 0.7, n))
+    C2 = list(np.random.poisson(1, n))
+    C3 = list(np.random.binomial(5, 0.4, n))
+    a = ['cat', 'dog', 'lion']
+    C4 = list(np.random.choice(a, n))
     df = pd.DataFrame({
-        'C1':C1,
-        'C2':C2,
-        'C3':C3,
-        'N1':N1,
-        'N2':N2,
-        'N3':N3, 
-        'C4':C4
+        'C1': C1,
+        'C2': C2,
+        'C3': C3,
+        'N1': N1,
+        'N2': N2,
+        'N3': N3,
+        'C4': C4
     })
 
-    rows = list(np.random.randint(0,n,20))
-    cols = list(np.random.randint(0,7,5))
-    df.iloc[rows,cols] = np.nan
+    rows = list(np.random.randint(0, n, 20))
+    cols = list(np.random.randint(0, 7, 5))
+    df.iloc[rows, cols] = np.nan
 
     return df
 
-    def test_calc_cor():
+def test_calc_cor():
     """
     Tests the corrleation function calc_cor to make sure the outputs are correctly rendering.
 
@@ -116,6 +117,50 @@ def helper_create_data(n = 500):
     test_data = helper_create_data()
     test_col = test_data['N1']
 
+# noinspection PyBroadException
+def test_describe_na_value():
+    no_na_dataframe = pd.DataFrame({"col_1": [0, 2],
+                                    "col_2": [0.5, 0.1],
+                                    "col_3": ["a", "b"]})
+
+    na_numerical_dataframe = pd.DataFrame({"col_1": [0, 2],
+                                           "col_2": [np.nan, 0.1],
+                                           "col_3": ["a", "b"]})
+
+    na_categorical_dataframe = pd.DataFrame({"col_1": [0, 2],
+                                             "col_2": [0.5, 0.1],
+                                             "col_3": [np.nan, "b"]})
+
+    not_a_dataframe = [[0, 2],
+                       [0.5, 0.1],
+                       ["a", "b"]]
+
+    try:
+        eda.describe_na_values(not_a_dataframe)
+    except Exception as e:
+        pass
+    else:
+        raise Exception("expected an Exception, but none were raised")
+
+    assert isinstance(eda.describe_na_values(no_na_dataframe), pd.DataFrame)
+    assert np.array_equiv(eda.describe_na_values(no_na_dataframe), pd.DataFrame([[1, 1],
+                                                                                 [1, 1],
+                                                                                 [1, 1]],
+                                                                                index=no_na_dataframe.columns))
+
+    assert isinstance(eda.describe_na_values(na_numerical_dataframe), pd.DataFrame)
+    assert np.array_equiv(eda.describe_na_values(na_numerical_dataframe), pd.DataFrame([[1, 1],
+                                                                                        [0, 1],
+                                                                                        [1, 1]],
+                                                                                       index=na_numerical_dataframe.columns))
+
+    assert isinstance(eda.describe_na_values(na_categorical_dataframe), pd.DataFrame)
+    assert np.array_equiv(eda.describe_na_values(na_categorical_dataframe), pd.DataFrame([[1, 1],
+                                                                                          [1, 1],
+                                                                                          [0, 1]],
+                                                                                         index=na_categorical_dataframe.columns))
+
+
 def test_describe_num_var():
     """
     Tests the describe_num_var function to make sure the outputs are correct.
@@ -145,7 +190,6 @@ def test_describe_num_var():
     assert summary['N1'][5] == np.nanmean(test_col), \
         "Mean value is not correctly calculated."
     assert summary['N1'][6] == np.nanstd(test_col), \
-
     "Standard deviation is not correctly calculated."
     
     # Test the plot type is correct.
