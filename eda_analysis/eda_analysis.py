@@ -83,6 +83,9 @@ def describe_na_values(dataframe: pd.DataFrame):
                      [0, 1]], index=["col_1", "col_2", "col_3"]])
 
     '''
+    if not isinstance(dataframe, pd.DataFrame):
+        raise Exception("the input data is not a dataframe.")
+
     bool_array = dataframe.isna()
     na_val = np.array([[0 if val else 1 for val in bool_array[col]] for col in bool_array.columns])
     return pd.DataFrame(data=na_val, index=dataframe.columns)

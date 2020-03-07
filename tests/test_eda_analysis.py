@@ -49,6 +49,7 @@ def helper_create_data(n=500):
     return df
 
 
+# noinspection PyBroadException
 def test_describe_na_value():
     no_na_dataframe = pd.DataFrame({"col_1": [0, 2],
                                     "col_2": [0.5, 0.1],
@@ -61,6 +62,17 @@ def test_describe_na_value():
     na_categorical_dataframe = pd.DataFrame({"col_1": [0, 2],
                                              "col_2": [0.5, 0.1],
                                              "col_3": [np.nan, "b"]})
+
+    not_a_dataframe = [[0, 2],
+                       [0.5, 0.1],
+                       ["a", "b"]]
+
+    try:
+        eda.describe_na_values(not_a_dataframe)
+    except Exception as e:
+        pass
+    else:
+        raise Exception("expected an Exception, but none were raised")
 
     assert isinstance(eda.describe_na_values(no_na_dataframe), pd.DataFrame)
     assert np.array_equiv(eda.describe_na_values(no_na_dataframe), pd.DataFrame([[1, 1],
