@@ -96,7 +96,7 @@ def test_describe_cat_var():
     
     #Testing if the specified columns has been plotted or not
     p = eda.describe_cat_var(data,cat_vars)
-    assert list(p.data.columns) == cat_vars, 'The specified categorical columns were not plotted'
+    assert set(p.data.columns) == set(cat_vars), 'The specified categorical columns were not plotted'
     
 
 
@@ -174,3 +174,4 @@ def test_describe_num_var():
     with pytest.raises(Exception) as e:
         assert eda.describe_num_var(test_data, ['N1', 'C4'])
     assert str(e.value) == "Only numeric columns expected, please check the input."
+

@@ -95,14 +95,13 @@ def describe_cat_var(dataframe,cat_vars, n_cols = 3):
     if not isinstance(n_cols,int) or n_cols<=0:
         raise Exception("The value of the argument 'n_cols' must be a positive non zero integer")
     
-    dataframe=dataframe.dropna()
     col_set = set(dataframe.columns)
     col_subset = set(cat_vars)
     if not col_subset.issubset(col_set):
         raise Exception("The input categorical column names must belong to the dataframe")
     
-
-    data = dataframe[cat_vars]
+    dataframe=dataframe.dropna()
+    data = dataframe[col_subset]
     n = len(cat_vars)
     n_cols = n_cols
     n_rows = int(np.ceil(n/n_cols))
