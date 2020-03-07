@@ -1,6 +1,6 @@
-import altair as alt
-import numpy as np
 import pandas as pd
+import numpy as np
+import altair as alt
 
 """Perform EDA analysis of the given DataFrame"""
 
@@ -222,8 +222,8 @@ def calc_cor(dataframe, num_vars):
     -----------
     dataframe: pandas.DataFrame
         The data frame whose EDA analysis is to be performed.
-    num_vars: list
-        A list of strings of column names containing numeric variables.
+    num_var: list
+        A list of unique strings of column names containing numeric variables.
 
     Returns:
     --------
@@ -242,4 +242,60 @@ def calc_cor(dataframe, num_vars):
     >>>num_var = ['height', 'width']
     >>> calc_cor(X, num_vars)    
     """
-    # Code
+    # Test input 'dataframe' is a dataframe
+    if not isinstance(dataframe, pd.DataFrame):
+        raise Exception("Input 'dataframe' is not a dataframe")
+        
+    # Check the num_vars input should be a list of strings
+    if not (all(isinstance(item, str) for item in num_vars) & isinstance(num_vars, list)):
+        raise Exception("The value of the argument 'num_vars' should be a list of strings.")
+        
+    # Check if the num_vars input contains only the column names
+    if not all(item in dataframe.columns for item in num_vars):
+        raise Exception("The argument 'num_vars' should be a subset of the column names from the dataframe.")
+    
+    for i in num_vars:
+        if not np.issubdtype(dataframe[i].dtype, np.number):
+          raise Exception("Columns are not all numeric")
+
+    # Check if the elements in the num_vars input are unique
+    if len(num_vars) != len(set(num_vars)):
+        raise Exception("The elements in the argument 'num_vars' should be unique.")
+        
+    df_num = dataframe.loc[:, num_vars]
+    df_num = df_num.dropna()
+
+    df_corr = round(df_num.corr(method='pearson'), 2)
+    
+    # Code adapted from https://github.com/altair-viz/altair/pull/1945/files
+    corr_list = sorted(df_corr.columns.to_list())
+    corr_list_copy = corr_list.copy()
+    rows = []
+    
+    # Format the data to make a lower triangle correlation maxtix
+    for i in corr_list:
+        for j in corr_list_copy:
+            rows.append([i,j, df_num.corr().loc[i,j]])
+        corr_list_copy.remove(i)
+
+    # Create dataframe from list of rows
+    new_df = pd.DataFrame(rows, columns=['Var1','Var2','Corr'])
+
+    # Create the rectangle heatmap as the base with text layer
+    heatmap = alt.Chart(new_df).mark_rect().encode(
+        alt.X('Var1:O'),
+        alt.Y('Var2:O', axis=alt.Axis(labelAngle=0)),
+        alt.Color('Corr:Q', legend=alt.Legend(direction='horizontal'))
+    ).properties(width = 400, height = 400, title = "Correlation matrix")
+
+    text = heatmap.mark_text(baseline='middle', fontSize=20).encode(
+        text=alt.Text('Corr:Q', format='.2'),
+        color=alt.condition(
+            alt.datum.Corr <= 0.2,
+            alt.value('black'),
+            alt.value('white')
+        )
+    )
+
+    corr_chart = heatmap + text
+    return corr_chart
