@@ -1,8 +1,9 @@
+
+"""Perform EDA analysis of the given DataFrame"""
+
 import pandas as pd
 import numpy as np
 import altair as alt
-
-"""Perform EDA analysis of the given DataFrame"""
 
 
 def generate_report(dataframe, cat_vars, num_vars):
@@ -91,7 +92,8 @@ def describe_na_values(dataframe: pd.DataFrame):
     return pd.DataFrame(data=na_val, index=dataframe.columns)
 
 
-def describe_cat_var(dataframe, cat_vars):
+
+def describe_cat_var(dataframe,cat_vars, n_cols = 3):
     """
     This function will take dataframe and categorical variable names and will 
     plot the histogram of each categorical variable.
@@ -102,6 +104,8 @@ def describe_cat_var(dataframe, cat_vars):
         The dataframe whose EDA analysis is to be performed
     cat_vars: list
         A list containing names of categorical variables
+    n_cols: int (default: 3)
+        A number indicating how many plots should be displayed in a row
     
     Returns:
     --------
@@ -118,8 +122,53 @@ def describe_cat_var(dataframe, cat_vars):
     >>> describe_cat_variable(X,cat_vars)
        
     """
-    # Code 
+    
+    #Checking for valid inputs
+    if not isinstance(dataframe, pd.DataFrame):
+        raise Exception("The value of the argument 'dataframe' must be of type 'pandas.DataFrame'")
+    
+    if not isinstance(cat_vars,list) or not all(isinstance(x, str) for x in cat_vars):
+        raise Exception("The value of the argument 'cat_vars' must be a list of strings")
+        
+    if not isinstance(n_cols,int) or n_cols<=0:
+        raise Exception("The value of the argument 'n_cols' must be a positive non zero integer")
+    
+    col_set = set(dataframe.columns)
+    col_subset = set(cat_vars)
+    if not col_subset.issubset(col_set):
+        raise Exception("The input categorical column names must belong to the dataframe")
+    
+    dataframe=dataframe.dropna()
+    data = dataframe[col_subset]
+    n = len(cat_vars)
+    n_cols = n_cols
+    n_rows = int(np.ceil(n/n_cols))
+    z = 0
+    
+    # Plotting the histograms in loop
+    for i in range(n_rows):
+        for j in range(n_cols):
+            if z < n :
+                cols = cat_vars[z]
+            else:
+                break
+            hist = alt.Chart(data).mark_bar(width = 40).encode(
+                x = alt.X(cols+':O'),
+                y = 'count()'
+            ).properties(height = 200, width = 300, title = 'Histogram of '+cat_vars[z])
+            z = z + 1
+            if j == 0:
+                row_plot = hist
+            else:
+                row_plot = alt.hconcat(row_plot,hist)
+        if i == 0:
+            plot = row_plot
+        else:
+            plot = alt.vconcat(plot,row_plot)
+            
+    return plot
 
+    
 
 def describe_num_var(dataframe, num_vars):
     """ 

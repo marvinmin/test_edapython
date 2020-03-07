@@ -1,11 +1,14 @@
 import altair as alt
 import numpy as np
 import pandas as pd
+import altair as alt
 import pytest
 from eda_analysis import eda_analysis as eda
 
 
-def helper_create_data(n=500):
+
+
+def helper_create_data(n = 500):
     """
     Helper function for creating dataframe for testing
     
@@ -40,12 +43,65 @@ def helper_create_data(n=500):
         'N3': N3,
         'C4': C4
     })
-
-    rows = list(np.random.randint(0, n, 20))
-    cols = list(np.random.randint(0, 7, 5))
-    df.iloc[rows, cols] = np.nan
-
+    rows = list(np.random.randint(0,n,20))
+    cols = list(np.random.randint(0,7,5))
+    df.iloc[rows,cols] = np.nan
+    
     return df
+
+
+def test_describe_cat_var():
+    #Calling helper function to create data
+    data = helper_create_data()
+    cat_vars = ['C1','C2','C3','C4']
+    #Testing data frame exception
+    x = [1,2,3]
+    try:
+        eda.describe_cat_var(x,cat_vars)
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'dataframe' must be of type 'pandas.DataFrame'" == str(ex), 'Expected exception not thrown'
+    
+    #Testing categorical variable exception
+    try:
+        eda.describe_cat_var(data,x)
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'cat_vars' must be a list of strings" == str(ex), 'Expected exception not thrown'
+    
+    #Testing columns subset exception
+    try:
+        cols = ['Y1','Y2']
+        eda.describe_cat_var(data,cols)
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The input categorical column names must belong to the dataframe" == str(ex), 'Expected exception not thrown'
+
+    #Testing non-zero input is being passed to n_col
+    try:
+        eda.describe_cat_var(data,cat_vars,0)
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'n_cols' must be a positive non zero integer" == str(ex), 'Expected exception not thrown'
+   
+    #testing integer is passed to n_col
+    try:
+        eda.describe_cat_var(data,cat_vars,"z")
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'n_cols' must be a positive non zero integer" == str(ex), 'Expected exception not thrown'
+        
+        
+    #Testing type of returned value
+    p = eda.describe_cat_var(data,cat_vars)
+    assert isinstance(p,alt.vegalite.v3.api.VConcatChart),'The function must return an altair plot'
+    
+    #Testing if the specified columns has been plotted or not
+    p = eda.describe_cat_var(data,cat_vars)
+    assert set(p.data.columns) == set(cat_vars), 'The specified categorical columns were not plotted'
+    
+
+
 
 def test_calc_cor():
     """
@@ -161,6 +217,7 @@ def test_describe_na_value():
                                                                                          index=na_categorical_dataframe.columns))
 
 
+
 def test_describe_num_var():
     """
     Tests the describe_num_var function to make sure the outputs are correct.
@@ -234,3 +291,4 @@ def test_describe_num_var():
     with pytest.raises(Exception) as e:
         assert eda.describe_num_var(test_data, ['N1', 'C4'])
     assert str(e.value) == "Only numeric columns expected, please check the input."
+
