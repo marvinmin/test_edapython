@@ -65,7 +65,7 @@ def describe_cat_var(dataframe,cat_vars, n_cols = 3):
         The dataframe whose EDA analysis is to be performed
     cat_vars: list
         A list containing names of categorical variables
-    n_cols: int
+    n_cols: int (default: 3)
         A number indicating how many plots should be displayed in a row
     
     Returns:
