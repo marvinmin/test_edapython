@@ -1,8 +1,10 @@
-from eda_analysis import eda_analysis as eda
+import altair as alt
 import numpy as np
 import pandas as pd
 import altair as alt
 import pytest
+from eda_analysis import eda_analysis as eda
+
 
 
 
@@ -24,22 +26,22 @@ def helper_create_data(n = 500):
     ---------
     >>> helper_create_data()
     """
-    N1 = list(np.random.exponential(3,n))
-    N2 = list(np.random.normal(2,2,n))
-    N3 = list(np.random.normal(10,3,n))
-    C1 = list(np.random.binomial(1,0.7,n))
-    C2 = list(np.random.poisson(1,n))
-    C3 = list(np.random.binomial(5,0.4,n))
-    a = ['cat','dog','lion']
-    C4 = list(np.random.choice(a,n))
+    N1 = list(np.random.exponential(3, n))
+    N2 = list(np.random.normal(2, 2, n))
+    N3 = list(np.random.normal(10, 3, n))
+    C1 = list(np.random.binomial(1, 0.7, n))
+    C2 = list(np.random.poisson(1, n))
+    C3 = list(np.random.binomial(5, 0.4, n))
+    a = ['cat', 'dog', 'lion']
+    C4 = list(np.random.choice(a, n))
     df = pd.DataFrame({
-        'C1':C1,
-        'C2':C2,
-        'C3':C3,
-        'N1':N1,
-        'N2':N2,
-        'N3':N3, 
-        'C4':C4
+        'C1': C1,
+        'C2': C2,
+        'C3': C3,
+        'N1': N1,
+        'N2': N2,
+        'N3': N3,
+        'C4': C4
     })
     rows = list(np.random.randint(0,n,20))
     cols = list(np.random.randint(0,7,5))
@@ -101,6 +103,121 @@ def test_describe_cat_var():
 
 
 
+def test_calc_cor():
+    """
+    Tests the corrleation function calc_cor to make sure the outputs are correctly rendering.
+
+    Returns:
+    --------
+    None
+        The test should pass and no asserts should be displayed. 
+    """
+
+    data = helper_create_data()
+    num_vars = ["N1", "N2", "N3"]
+    chart = eda.calc_cor(data, num_vars)
+    
+    # Check the data in the correlation matrix to be between -1 and 1
+    for i in range(0, len(chart.data)):
+        assert chart.data.iloc[i, 2] >= -1, "Out of range values: lower than -1"
+        assert chart.data.iloc[i, 2] <= 1, "Out of range values: higher than 1"
+    
+    # Tests if the first and last value is 1 since it correlates to itself
+    assert chart.data.iloc[0, 2] == 1, "The first value should be 1 because it is correlated to itself"
+    assert chart.data.iloc[-1, 2] == 1, "The last value should be 1 because it is correlated to itself"
+    
+    # Test that Var1 and Var2 are equal in the first and last row
+    assert chart.data.iloc[0, 0] == chart.data.iloc[0, 1], "The Var1 should equal Var2 in the first row"
+    assert chart.data.iloc[-1, 0] == chart.data.iloc[-1, 1], "The Var1 should equal Var2 in the last row"
+    
+    # Test if the axes are properly mapped to the correct field
+    spec = chart.to_dict()
+    assert spec["layer"][1]["encoding"]["x"]["field"] == 'Var1', "Plot x-axis should be mapped to Var1"
+    assert spec["layer"][1]["encoding"]["y"]["field"] == 'Var2', "Plot y-axis should be mapped to Var2"
+    
+    # Tests if the plot type is correct
+    assert "altair" in str(type(chart)), "Plot type is not an Altair object"
+    
+    # Tests the exception is correctly raised when columns are not numeric
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ["C4"])
+    assert str(e.value) == "Columns are not all numeric"
+    
+    # Tests the exception is correctly raised when 'columns are not numeric 'dataframe' 
+    # is not the correct type.
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(["N1"], ["N1"])
+    assert str(e.value) == "Input 'dataframe' is not a dataframe"
+
+    # Tests the exception is correctly raised when 'num_vars' is not a string.
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ['N1', 1])
+    assert str(e.value) == "The value of the argument 'num_vars' should be a list of strings."
+    
+    # Tests the exception is correctly raised when 'num_vars' is not a string
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, 'N1')
+    assert str(e.value) == "The value of the argument 'num_vars' should be a list of strings."
+
+    # Tests the exception is correctly raised when elements in 'num_vars' are not unique.
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ['N1', 'N1'])
+    assert str(e.value) == "The elements in the argument 'num_vars' should be unique."
+
+    # Test the Exception is correctly raised when 'num_vars' argument is not a subset of 
+    # the column names of the dataframe
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ["N1", "abc"])
+    assert str(e.value) == "The argument 'num_vars' should be a subset of the column names from the dataframe."
+    # Generate test data from the helper function.
+    test_data = helper_create_data()
+    test_col = test_data['N1']
+
+# noinspection PyBroadException
+def test_describe_na_value():
+    no_na_dataframe = pd.DataFrame({"col_1": [0, 2],
+                                    "col_2": [0.5, 0.1],
+                                    "col_3": ["a", "b"]})
+
+    na_numerical_dataframe = pd.DataFrame({"col_1": [0, 2],
+                                           "col_2": [np.nan, 0.1],
+                                           "col_3": ["a", "b"]})
+
+    na_categorical_dataframe = pd.DataFrame({"col_1": [0, 2],
+                                             "col_2": [0.5, 0.1],
+                                             "col_3": [np.nan, "b"]})
+
+    not_a_dataframe = [[0, 2],
+                       [0.5, 0.1],
+                       ["a", "b"]]
+
+    try:
+        eda.describe_na_values(not_a_dataframe)
+    except Exception as e:
+        pass
+    else:
+        raise Exception("expected an Exception, but none were raised")
+
+    assert isinstance(eda.describe_na_values(no_na_dataframe), pd.DataFrame)
+    assert np.array_equiv(eda.describe_na_values(no_na_dataframe), pd.DataFrame([[1, 1],
+                                                                                 [1, 1],
+                                                                                 [1, 1]],
+                                                                                index=no_na_dataframe.columns))
+
+    assert isinstance(eda.describe_na_values(na_numerical_dataframe), pd.DataFrame)
+    assert np.array_equiv(eda.describe_na_values(na_numerical_dataframe), pd.DataFrame([[1, 1],
+                                                                                        [0, 1],
+                                                                                        [1, 1]],
+                                                                                       index=na_numerical_dataframe.columns))
+
+    assert isinstance(eda.describe_na_values(na_categorical_dataframe), pd.DataFrame)
+    assert np.array_equiv(eda.describe_na_values(na_categorical_dataframe), pd.DataFrame([[1, 1],
+                                                                                          [1, 1],
+                                                                                          [0, 1]],
+                                                                                         index=na_categorical_dataframe.columns))
+
+
+
 def test_describe_num_var():
     """
     Tests the describe_num_var function to make sure the outputs are correct.
@@ -120,15 +237,15 @@ def test_describe_num_var():
     assert summary['N1'][0] == np.nanquantile(test_col, 0.25),\
     "25% quantile is not correctly calculated."
     assert summary['N1'][1] == np.nanquantile(test_col, 0.75), \
-    "75% quantile is not correctly calculated."
+        "75% quantile is not correctly calculated."
     assert summary['N1'][2] == np.nanmin(test_col), \
-    "Minimal value is not correctly calculated."
+        "Minimal value is not correctly calculated."
     assert summary['N1'][3] == np.nanmax(test_col), \
-    "Maximal value is not correctly calculated."
+        "Maximal value is not correctly calculated."
     assert summary['N1'][4] == np.nanmedian(test_col), \
-    "Median value is not correctly calculated."
+        "Median value is not correctly calculated."
     assert summary['N1'][5] == np.nanmean(test_col), \
-    "Mean value is not correctly calculated."
+        "Mean value is not correctly calculated."
     assert summary['N1'][6] == np.nanstd(test_col), \
     "Standard deviation is not correctly calculated."
     

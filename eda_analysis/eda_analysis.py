@@ -1,11 +1,13 @@
 
 """Perform EDA analysis of the given DataFrame"""
+
 import pandas as pd
 import numpy as np
 import altair as alt
 import pytest
 
-def generate_report(dataframe,cat_vars,num_vars):
+
+def generate_report(dataframe, cat_vars, num_vars):
     """
     This function generates an EDA report by plotting graphs and tables for the 
     numeric variables, categorical variables, NA values and correlation in a dataframe
@@ -35,9 +37,9 @@ def generate_report(dataframe,cat_vars,num_vars):
     >>> describe_cat_variable(X,cat_vars,num_vars)
     
     """
-    
-    
-def describe_na_values(dataframe):
+
+
+def describe_na_values(dataframe: pd.DataFrame):
     '''
     describes the na_values in an input pandas dataframe as a 2d array of 1's and 0's.
 
@@ -51,10 +53,47 @@ def describe_na_values(dataframe):
     numpy.ndarray
         A 2d Numpy Array of 1's and 0's, corresponding to the value of each entry in the dataframe.
         0 represents an NA value, 1 represents a non-NA value.
-    '''
-    pass    
+    Examples:
+    ---------
+    >>> no_na_dataframe = pd.DataFrame({
+                                    "col_1": [0, 2],
+                                    "col_2": [0.5, 0.1],
+                                    "col_3": ["a", "b"]
+                                    })
+    >>> describe_na_variable(no_na_dataframe)
+    Pandas.DataFrame([[1, 1],
+                     [1, 1],
+                     [1, 1]], index=["col_1", "col_2", "col_3"]])
 
-  
+    >>>  na_numerical_dataframe = pd.DataFrame({
+                                           "col_1": [0, 2],
+                                           "col_2": [numpy.nan, 0.1],
+                                           "col_3": ["a", "b"]
+                                           }),
+    >>> describe_na_variable(na_numerical_dataframe)
+    Pandas.DataFrame([[1, 1],
+                     [0, 1],
+                     [1, 1]], index=["col_1", "col_2", "col_3"]])
+    >>>  na_categorical_dataframe = pd.DataFrame({
+                                           "col_1": [0, 2],
+                                           "col_2": [0.5, 0.1],
+                                           "col_3": [np.nan, "b"]
+                                           }),
+    >>> describe_na_variable(na_numerical_dataframe)
+    Pandas.DataFrame([[1, 1],
+                     [1, 1],
+                     [0, 1]], index=["col_1", "col_2", "col_3"]])
+
+    '''
+    if not isinstance(dataframe, pd.DataFrame):
+        raise Exception("the input data is not a dataframe.")
+
+    bool_array = dataframe.isna()
+    na_val = np.array([[0 if val else 1 for val in bool_array[col]] for col in bool_array.columns])
+    return pd.DataFrame(data=na_val, index=dataframe.columns)
+
+
+
 def describe_cat_var(dataframe,cat_vars, n_cols = 3):
     """
     This function will take dataframe and categorical variable names and will 
@@ -131,6 +170,7 @@ def describe_cat_var(dataframe,cat_vars, n_cols = 3):
     return plot
 
     
+
 def describe_num_var(dataframe, num_vars):
     """ 
     This function takes dataframe and numeric variable names and provides 
@@ -168,11 +208,11 @@ def describe_num_var(dataframe, num_vars):
     # Check the dataframe input
     if not isinstance(dataframe, pd.DataFrame):
         raise Exception("The value of the argument 'dataframe' should be of type pandas dataframe.")
-    
+
     # Check the num_vars input should be a list of strings
     if not (all(isinstance(item, str) for item in num_vars) & isinstance(num_vars, list)):
         raise Exception("The value of the argument 'num_vars' should be a list of strings.")
-    
+
     # Check if the elements in the num_vars input are unique
     if len(num_vars) != len(set(num_vars)):
         raise Exception("The elements in the argument 'num_vars' should be unique.")
@@ -180,10 +220,10 @@ def describe_num_var(dataframe, num_vars):
     # Check if the num_vars input contains only the column names
     if not all(item in dataframe.columns for item in num_vars):
         raise Exception("The argument 'num_vars' should be a subset of the column names from the dataframe.")
-    
+
     # Subset and transpose the dataframe for later use 
     df = pd.DataFrame(dataframe[num_vars]).T
-    
+
     # Check if only the numeric columns are selected
     if not np.issubdtype(df.to_numpy().dtype, np.number):
         raise Exception("Only numeric columns expected, please check the input.")
@@ -196,19 +236,19 @@ def describe_num_var(dataframe, num_vars):
         temp.append(data_stat)
 
     temp_df = pd.DataFrame(temp)
-    quantiles_df = pd.DataFrame([np.nanquantile(df, 0.25, axis = 1), 
-                                 np.nanquantile(df, 0.75, axis = 1)])
+    quantiles_df = pd.DataFrame([np.nanquantile(df, 0.25, axis=1),
+                                 np.nanquantile(df, 0.75, axis=1)])
     quantiles_df.columns = num_vars
 
     summary = pd.concat([quantiles_df, temp_df])
-    
+
     # Change the index more readable
     summary.index = ["25%", "75%", "min", "max", "median", "mean", "sd"]
-    
+
     # Make the histogram
     df_to_plot = df.T.melt().dropna()
     plot = alt.Chart(df_to_plot).mark_bar().encode(
-        alt.X("value:Q", bin=alt.Bin(maxbins=30), title = "Value"),
+        alt.X("value:Q", bin=alt.Bin(maxbins=30), title="Value"),
         y='count()'
     ).properties(
         width=300,
@@ -217,8 +257,8 @@ def describe_num_var(dataframe, num_vars):
     ).facet(
         facet='variable:N',
         columns=3
-        )
-    
+    )
+
     return summary, plot
 
 
@@ -232,8 +272,8 @@ def calc_cor(dataframe, num_vars):
     -----------
     dataframe: pandas.DataFrame
         The data frame whose EDA analysis is to be performed.
-    num_vars: list
-        A list of strings of column names containing numeric variables.
+    num_var: list
+        A list of unique strings of column names containing numeric variables.
 
     Returns:
     --------
@@ -252,4 +292,60 @@ def calc_cor(dataframe, num_vars):
     >>>num_var = ['height', 'width']
     >>> calc_cor(X, num_vars)    
     """
-    # Code
+    # Test input 'dataframe' is a dataframe
+    if not isinstance(dataframe, pd.DataFrame):
+        raise Exception("Input 'dataframe' is not a dataframe")
+        
+    # Check the num_vars input should be a list of strings
+    if not (all(isinstance(item, str) for item in num_vars) & isinstance(num_vars, list)):
+        raise Exception("The value of the argument 'num_vars' should be a list of strings.")
+        
+    # Check if the num_vars input contains only the column names
+    if not all(item in dataframe.columns for item in num_vars):
+        raise Exception("The argument 'num_vars' should be a subset of the column names from the dataframe.")
+    
+    for i in num_vars:
+        if not np.issubdtype(dataframe[i].dtype, np.number):
+          raise Exception("Columns are not all numeric")
+
+    # Check if the elements in the num_vars input are unique
+    if len(num_vars) != len(set(num_vars)):
+        raise Exception("The elements in the argument 'num_vars' should be unique.")
+        
+    df_num = dataframe.loc[:, num_vars]
+    df_num = df_num.dropna()
+
+    df_corr = round(df_num.corr(method='pearson'), 2)
+    
+    # Code adapted from https://github.com/altair-viz/altair/pull/1945/files
+    corr_list = sorted(df_corr.columns.to_list())
+    corr_list_copy = corr_list.copy()
+    rows = []
+    
+    # Format the data to make a lower triangle correlation maxtix
+    for i in corr_list:
+        for j in corr_list_copy:
+            rows.append([i,j, df_num.corr().loc[i,j]])
+        corr_list_copy.remove(i)
+
+    # Create dataframe from list of rows
+    new_df = pd.DataFrame(rows, columns=['Var1','Var2','Corr'])
+
+    # Create the rectangle heatmap as the base with text layer
+    heatmap = alt.Chart(new_df).mark_rect().encode(
+        alt.X('Var1:O'),
+        alt.Y('Var2:O', axis=alt.Axis(labelAngle=0)),
+        alt.Color('Corr:Q', legend=alt.Legend(direction='horizontal'))
+    ).properties(width = 400, height = 400, title = "Correlation matrix")
+
+    text = heatmap.mark_text(baseline='middle', fontSize=20).encode(
+        text=alt.Text('Corr:Q', format='.2'),
+        color=alt.condition(
+            alt.datum.Corr <= 0.2,
+            alt.value('black'),
+            alt.value('white')
+        )
+    )
+
+    corr_chart = heatmap + text
+    return corr_chart
