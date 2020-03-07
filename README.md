@@ -4,11 +4,11 @@
 
 ![](https://github.com/sweber15/eda_analysis/workflows/build/badge.svg) 
 
-[![codecov](https://codecov.io/gh/sweber15/eda_analysis/branch/master/graph/badge.svg)](https://codecov.io/gh/sweber15/eda_analysis)
+![codecov](https://codecov.io/gh/sweber15/eda_analysis/branch/master/graph/badge.svg)
  
- ![Release](https://github.com/sweber15/eda_analysis/workflows/Release/badge.svg)
+![Release](https://github.com/sweber15/eda_analysis/workflows/Release/badge.svg)
 
-[![Documentation Status](https://edapython.readthedocs.io/en/latest/?badge=latest)](https://edapython.readthedocs.io/en/latest/?badge=latest)
+![Documentation Status](https://edapython.readthedocs.io/en/latest/?badge=latest)
 
 Exploratory Data analysis is an important step in any data analysis. There are some general steps like describing the data, knowing `NA` values and plotting the distributions of the variables  which are performed to understand the data well. All these tasks require a lot of coding effort. The package tries to address this issue by providing a single function which will generate a general exploratory data analysis report. This report will contain the distribution plots of categorical and numerical variables, correlation matrix and a numerical and graphical representation to understand and identify `NA` values.
 
