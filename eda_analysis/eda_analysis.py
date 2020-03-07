@@ -87,7 +87,8 @@ def describe_na_values(dataframe: pd.DataFrame):
 
     '''
     bool_array = dataframe.isna()
-    return np.array([[0 if val else 1 for val in bool_array[col]] for col in bool_array.columns])
+    na_val = np.array([[0 if val else 1 for val in bool_array[col]] for col in bool_array.columns])
+    return pd.Series(data = np.sum(na_val!=1,axis=1),index = list(dataframe.columns))
 
 
 def describe_cat_var(dataframe, cat_vars):
