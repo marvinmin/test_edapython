@@ -1,12 +1,14 @@
 import altair as alt
 import numpy as np
 import pandas as pd
+import altair as alt
 import pytest
-
 from eda_analysis import eda_analysis as eda
 
 
-def helper_create_data(n=500):
+
+
+def helper_create_data(n = 500):
     """
     Helper function for creating dataframe for testing
     
@@ -41,13 +43,163 @@ def helper_create_data(n=500):
         'N3': N3,
         'C4': C4
     })
-
-    rows = list(np.random.randint(0, n, 20))
-    cols = list(np.random.randint(0, 7, 5))
-    df.iloc[rows, cols] = np.nan
-
+    rows = list(np.random.randint(0,n,20))
+    cols = list(np.random.randint(0,7,5))
+    df.iloc[rows,cols] = np.nan
+    
     return df
 
+def test_generate_report():
+    """
+    Tests the generate_report function to make sure the outputs are correct.
+    Returns:
+    --------
+    None
+        The test should pass and no asserts should be displayed. 
+    """
+    #Calling helper function to create data
+    data = helper_create_data()
+    cat_vars = ['C1','C2','C3','C4']
+    num_vars = ['N1','N2','N3']
+    
+    # Positive test case: Checking whether the function runs properly or not
+    assert eda.generate_report(data,cat_vars,num_vars), "Expected True but False returned"
+    
+    # Negative test case: Checking whether the function returns False fr wrong output
+    assert not eda.generate_report(data,cat_vars,"String Input"), "Expected False but True returned"
+    
+    
+
+
+def test_describe_cat_var():
+    """
+    Tests the describe_cat_var function to make sure the outputs are correct.
+    Returns:
+    --------
+    None
+        The test should pass and no asserts should be displayed. 
+    """
+    #Calling helper function to create data
+    data = helper_create_data()
+    cat_vars = ['C1','C2','C3','C4']
+    #Testing data frame exception
+    x = [1,2,3]
+    try:
+        eda.describe_cat_var(x,cat_vars)
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'dataframe' must be of type 'pandas.DataFrame'" == str(ex), 'Expected exception not thrown'
+    
+    #Testing categorical variable exception
+    try:
+        eda.describe_cat_var(data,x)
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'cat_vars' must be a list of strings" == str(ex), 'Expected exception not thrown'
+    
+    #Testing columns subset exception
+    try:
+        cols = ['Y1','Y2']
+        eda.describe_cat_var(data,cols)
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The input categorical column names must belong to the dataframe" == str(ex), 'Expected exception not thrown'
+
+    #Testing non-zero input is being passed to n_col
+    try:
+        eda.describe_cat_var(data,cat_vars,0)
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'n_cols' must be a positive non zero integer" == str(ex), 'Expected exception not thrown'
+   
+    #testing integer is passed to n_col
+    try:
+        eda.describe_cat_var(data,cat_vars,"z")
+        assert False,'Exception must be thorwn for this test case'
+    except Exception as ex:
+        assert "The value of the argument 'n_cols' must be a positive non zero integer" == str(ex), 'Expected exception not thrown'
+        
+        
+    #Testing type of returned value
+    p = eda.describe_cat_var(data,cat_vars)
+    assert isinstance(p,alt.vegalite.v3.api.VConcatChart),'The function must return an altair plot'
+    
+    #Testing if the specified columns has been plotted or not
+    p = eda.describe_cat_var(data,cat_vars)
+    assert set(p.data.columns) == set(cat_vars), 'The specified categorical columns were not plotted'
+    
+
+
+
+def test_calc_cor():
+    """
+    Tests the corrleation function calc_cor to make sure the outputs are correctly rendering.
+
+    Returns:
+    --------
+    None
+        The test should pass and no asserts should be displayed. 
+    """
+
+    data = helper_create_data()
+    num_vars = ["N1", "N2", "N3"]
+    chart = eda.calc_cor(data, num_vars)
+    
+    # Check the data in the correlation matrix to be between -1 and 1
+    for i in range(0, len(chart.data)):
+        assert chart.data.iloc[i, 2] >= -1, "Out of range values: lower than -1"
+        assert chart.data.iloc[i, 2] <= 1, "Out of range values: higher than 1"
+    
+    # Tests if the first and last value is 1 since it correlates to itself
+    assert chart.data.iloc[0, 2] == 1, "The first value should be 1 because it is correlated to itself"
+    assert chart.data.iloc[-1, 2] == 1, "The last value should be 1 because it is correlated to itself"
+    
+    # Test that Var1 and Var2 are equal in the first and last row
+    assert chart.data.iloc[0, 0] == chart.data.iloc[0, 1], "The Var1 should equal Var2 in the first row"
+    assert chart.data.iloc[-1, 0] == chart.data.iloc[-1, 1], "The Var1 should equal Var2 in the last row"
+    
+    # Test if the axes are properly mapped to the correct field
+    spec = chart.to_dict()
+    assert spec["layer"][1]["encoding"]["x"]["field"] == 'Var1', "Plot x-axis should be mapped to Var1"
+    assert spec["layer"][1]["encoding"]["y"]["field"] == 'Var2', "Plot y-axis should be mapped to Var2"
+    
+    # Tests if the plot type is correct
+    assert "altair" in str(type(chart)), "Plot type is not an Altair object"
+    
+    # Tests the exception is correctly raised when columns are not numeric
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ["C4"])
+    assert str(e.value) == "Columns are not all numeric"
+    
+    # Tests the exception is correctly raised when 'columns are not numeric 'dataframe' 
+    # is not the correct type.
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(["N1"], ["N1"])
+    assert str(e.value) == "Input 'dataframe' is not a dataframe"
+
+    # Tests the exception is correctly raised when 'num_vars' is not a string.
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ['N1', 1])
+    assert str(e.value) == "The value of the argument 'num_vars' should be a list of strings."
+    
+    # Tests the exception is correctly raised when 'num_vars' is not a string
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, 'N1')
+    assert str(e.value) == "The value of the argument 'num_vars' should be a list of strings."
+
+    # Tests the exception is correctly raised when elements in 'num_vars' are not unique.
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ['N1', 'N1'])
+    assert str(e.value) == "The elements in the argument 'num_vars' should be unique."
+
+    # Test the Exception is correctly raised when 'num_vars' argument is not a subset of 
+    # the column names of the dataframe
+    with pytest.raises(Exception) as e:
+        assert eda.calc_cor(data, ["N1", "abc"])
+    assert str(e.value) == "The argument 'num_vars' should be a subset of the column names from the dataframe."
+    # Generate test data from the helper function.
+    test_data = helper_create_data()
+    test_col = test_data['N1']
 
 # noinspection PyBroadException
 def test_describe_na_value():
@@ -100,6 +252,7 @@ def test_describe_na_value():
                                                                                          index=na_categorical_dataframe.columns))
 
 
+
 def test_describe_num_var():
     """
     Tests the describe_num_var function to make sure the outputs are correct.
@@ -129,7 +282,6 @@ def test_describe_num_var():
     assert summary['N1'][5] == np.nanmean(test_col), \
         "Mean value is not correctly calculated."
     assert summary['N1'][6] == np.nanstd(test_col), \
-
     "Standard deviation is not correctly calculated."
     
     # Test the plot type is correct.
@@ -174,3 +326,4 @@ def test_describe_num_var():
     with pytest.raises(Exception) as e:
         assert eda.describe_num_var(test_data, ['N1', 'C4'])
     assert str(e.value) == "Only numeric columns expected, please check the input."
+
