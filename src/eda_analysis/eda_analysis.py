@@ -40,7 +40,8 @@ def generate_report(dataframe, cat_vars, num_vars):
         na_df = describe_na_values(dataframe)
         na_data = na_df.values
         na_report = pd.DataFrame(data=np.sum(na_data != 1, axis=1),
-                                 index=list(dataframe.columns),columns = ['Number of NA values'])
+                                 index=list(dataframe.columns),
+                                 columns=['Number of NA values'])
         print("Number of NA values in each column")
         print(na_report)
 
