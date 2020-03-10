@@ -106,7 +106,8 @@ num_vars = ['N1', 'N2', 'N3']
 generate_report(data,cat_vars,num_vars)
 ```
 
-![img/report.png]
+<img src="img/report.png" width="100%" />
+
 
 ### Documentation
 The official documentation is hosted on Read the Docs: <https://edapython.readthedocs.io/en/latest/>
