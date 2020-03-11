@@ -7,8 +7,8 @@
 #
 import os
 import sys
-
-from src import eda_analysis
+sys.path.insert(0, os.path.abspath('..'))
+import eda_analysis
 
 #
 # eda_analysis documentation build configuration file, created by
@@ -22,7 +22,6 @@ from src import eda_analysis
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- General configuration ---------------------------------------------

@@ -10,17 +10,17 @@ def helper_create_data(n=500):
     """
     Helper function for creating dataframe for testing
 
-    Parameters:
+    Parameters
     -----------
     n: int (default value = 500)
         Number of rows to be generated for the dataframe
 
-    Returns:
+    Returns
     --------
     pandas.DataFrame
         Returns a dataframe to be used for testing
 
-    Examples:
+    Examples
     ---------
     >>> helper_create_data()
     """
@@ -51,7 +51,8 @@ def helper_create_data(n=500):
 def test_generate_report():
     """
     Tests the generate_report function to make sure the outputs are correct.
-    Returns:
+
+    Returns
     --------
     None
         The test should pass and no asserts should be displayed.
@@ -74,7 +75,8 @@ def test_generate_report():
 def test_describe_cat_var():
     """
     Tests the describe_cat_var function to make sure the outputs are correct.
-    Returns:
+
+    Returns
     --------
     None
         The test should pass and no asserts should be displayed.
@@ -140,7 +142,7 @@ def test_calc_cor():
     Tests the correlation function calc_cor to make sure the outputs are
     correctly rendering.
 
-    Returns:
+    Returns
     --------
     None
         The test should pass and no asserts should be displayed.
@@ -223,7 +225,8 @@ def test_describe_na_value():
     """
     Tests the test_describe_na_value function
     to make sure the outputs are correct.
-    Returns:
+
+    Returns
     --------
     None
         The test should pass and no asserts should be displayed.
@@ -279,7 +282,8 @@ def test_describe_na_value():
 def test_describe_num_var():
     """
     Tests the describe_num_var function to make sure the outputs are correct.
-    Returns:
+
+    Returns
     --------
     None
         The test should pass and no asserts should be displayed.
