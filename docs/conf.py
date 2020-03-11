@@ -7,7 +7,7 @@
 #
 import os
 import sys
-
+sys.path.insert(0, os.path.abspath('..'))
 import eda_analysis
 
 #
@@ -22,7 +22,6 @@ import eda_analysis
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- General configuration ---------------------------------------------
