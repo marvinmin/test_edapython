@@ -8,7 +8,7 @@
 import os
 import sys
 
-from src import eda_analysis
+import eda_analysis
 
 #
 # eda_analysis documentation build configuration file, created by
