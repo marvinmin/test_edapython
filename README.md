@@ -6,7 +6,7 @@
 
 [![codecov](https://codecov.io/gh/UBC-MDS/edapython/branch/master/graph/badge.svg)](https://codecov.io/gh/UBC-MDS/edapython)
  
-![Release](https://github.com/sweber15/eda_analysis/workflows/Release/badge.svg)
+![Release](https://github.com/UBC-MDS/edapython/workflows/Release/badge.svg?branch=master)
 
 [![Documentation Status](https://readthedocs.org/projects/edapython/badge/?version=latest)
 
