@@ -1,5 +1,3 @@
-"""Perform EDA analysis of the given DataFrame"""
-
 import altair as alt
 import numpy as np
 import pandas as pd
@@ -34,8 +32,8 @@ def generate_report(dataframe, cat_vars, num_vars):
     >>>cat_vars = ['type']
     >>>num_vars = ['height']
     >>> describe_cat_variable(X,cat_vars,num_vars)
-
     """
+
     try:
         na_df = describe_na_values(dataframe)
         na_data = na_df.values
@@ -73,19 +71,19 @@ def generate_report(dataframe, cat_vars, num_vars):
         return False
 
 
-def describe_na_values(dataframe: pd.DataFrame):
+def describe_na_values(dataframe):
     """
-    describes the na_values in an input pandas dataframe
+    Describes the na_values in an input pandas dataframe
     as a 2d array of 1's and 0's
 
     Parameters
     ----------
-    dataframe: Pandas.DataFrame
+    dataframe: `Pandas.DataFrame`
         the input pd.DataFrame object
 
     Returns
     -------
-    pandas.DataFrame
+    `pandas.DataFrame`
         A DataFrame of 1's and 0's, corresponding to the value
         of each entry in the input dataframe
         0 represents an NA value, 1 represents a non-NA value
@@ -119,8 +117,8 @@ def describe_na_values(dataframe: pd.DataFrame):
     Pandas.DataFrame([[1, 1],
                      [1, 1],
                      [0, 1]], index=["col_1", "col_2", "col_3"]])
-
     """
+
     if not isinstance(dataframe, pd.DataFrame):
         raise Exception("the input data is not a dataframe.")
 
@@ -133,20 +131,20 @@ def describe_na_values(dataframe: pd.DataFrame):
 def describe_cat_var(dataframe, cat_vars, n_cols=3):
     """
     This function will take dataframe and categorical variable names and will
-    plot the histogram of each categorical variable.
+    plot the histogram of each categorical variable
 
     Parameters
     -----------
-    dataframe: pandas.DataFrame
+    dataframe: `pandas.DataFrame`
         The dataframe whose EDA analysis is to be performed
-    cat_vars: list
+    cat_vars: `list`
         A list containing names of categorical variables
-    n_cols: int (default: 3)
+    n_cols: `int`, optional
         A number indicating how many plots should be displayed in a row
 
     Returns
     --------
-    altair
+    `altair`
         a grid of altair plot containing all histograms
 
     Examples
@@ -157,7 +155,6 @@ def describe_cat_var(dataframe, cat_vars, n_cols=3):
     })
     >>> cat_vars = ['type']
     >>> describe_cat_variable(X,cat_vars)
-
     """
 
     # Checking for valid inputs
@@ -219,19 +216,18 @@ def describe_num_var(dataframe, num_vars):
 
     Parameters
     -----------
-    dataframe: pandas.DataFrame
+    dataframe: `pandas.DataFrame`
         The dataframe to be inspected.
-    num_vars: list
+    num_vars: `list`
         A list of unique character strings of the names of
         the numeric variables.
 
     Returns
     --------
-    tuple(pandas.DataFrame, altair)
-        pandas.DataFrame
-            statistical summary of the numeric variables
-        altair
-            a grid of altair plot containing all histograms
+    tuple
+        a tuple a statistical summary of the numeric variables as a
+        `pandas.Dataframe` and a grid of `altair` plot containing
+        all histograms
 
     Examples
     ---------
@@ -244,7 +240,6 @@ def describe_num_var(dataframe, num_vars):
     >>> summary, plot = describe_num_var(X, num_vars)
     >>> summary
     >>> plot
-
     """
     # Check the dataframe input
     if not isinstance(dataframe, pd.DataFrame):
@@ -316,15 +311,14 @@ def calc_cor(dataframe, num_vars):
 
     Parameters
     -----------
-    dataframe: pandas.DataFrame
+    dataframe: `pandas.DataFrame`
         The data frame whose EDA analysis is to be performed.
-    num_var: list
+    num_var: `list`
         A list of unique strings of column names containing numeric variables.
 
     Returns
     --------
-    altair
-
+    `altair`
         A correlogram plot labelled with the correlation coefficients
         of -1 to 1 between each numeric column and other numeric variables
         in the dataframe.
@@ -398,6 +392,5 @@ def calc_cor(dataframe, num_vars):
             alt.value('white')
         )
     )
-
     corr_chart = heatmap + text
     return corr_chart

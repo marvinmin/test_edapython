@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.eda_analysis import eda_analysis as eda
+from eda_analysis import eda_analysis as eda
 
 
 def helper_create_data(n=500):
