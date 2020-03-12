@@ -49,6 +49,66 @@ To use eda_analysis in a project::
     
 Visit our [read the docs page](https://edapython.readthedocs.io/en/latest/source/eda_analysis.html#module-eda_analysis) to see individual function usage.
 
+### Examples
+
+This is a working example:
+
+```
+import altair as alt
+import numpy as np
+import pandas as pd
+
+def helper_create_data(n=500):
+    """
+    Helper function for creating dataframe for testing
+
+    Parameters:
+    -----------
+    n: int (default value = 500)
+        Number of rows to be generated for the dataframe
+
+    Returns:
+    --------
+    pandas.DataFrame
+        Returns a dataframe to be used for testing
+
+    Examples:
+    ---------
+    >>> helper_create_data()
+    """
+    N1 = list(np.random.exponential(3, n))
+    N2 = list(np.random.normal(2, 2, n))
+    N3 = list(np.random.normal(10, 3, n))
+    C1 = list(np.random.binomial(1, 0.7, n))
+    C2 = list(np.random.poisson(1, n))
+    C3 = list(np.random.binomial(5, 0.4, n))
+    a = ['cat', 'dog', 'lion']
+    C4 = list(np.random.choice(a, n))
+    df = pd.DataFrame({
+        'C1': C1,
+        'C2': C2,
+        'C3': C3,
+        'N1': N1,
+        'N2': N2,
+        'N3': N3,
+        'C4': C4
+    })
+    rows = list(np.random.randint(0, n, 20))
+    cols = list(np.random.randint(0, 7, 5))
+    df.iloc[rows, cols] = np.nan
+
+    return df
+
+data = helper_create_data()
+cat_vars = ['C1', 'C2', 'C3', 'C4']
+num_vars = ['N1', 'N2', 'N3']
+
+generate_report(data,cat_vars,num_vars)
+```
+
+<img src="img/report.png" width="100%" />
+
+
 ### Documentation
 The official documentation is hosted on Read the Docs: <https://edapython.readthedocs.io/en/latest/>
 
