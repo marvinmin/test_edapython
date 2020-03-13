@@ -8,8 +8,8 @@ authors = ["sweber15 <sarah.weber@live.ca>",
             "marvinmin <marvinmin@github.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/UBC-MDS/edapython"
-repository = "https://github.com/UBC-MDS/edapython"
+homepage = "https://github.com/marvinmin/test_edapython"
+repository = "https://github.com/marvinmin/test_edapython"
 documentation = 'https://edapython.readthedocs.io/'
 
 [tool.semantic_release]
