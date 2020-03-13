@@ -51,8 +51,8 @@ def generate_report(dataframe, cat_vars, num_vars):
         print(num_var_desc)
 
         print(' ')
-        print('Categorical/Numerical variable histogram', 
-        'and Correlation plot of numerical variable:')
+        print('Categorical/Numerical variable histogram' +
+            'and Correlation plot of numerical variable:')
         cor_plot = calc_cor(dataframe, num_vars)
         cat_var_plot & num_var_plot & cor_plot
 
