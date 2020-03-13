@@ -86,7 +86,7 @@ jobs:
     - name: Release tag
       run: |
         echo ::set-output name=release_tag::$(grep "version" */__init__.py | cut -d "'" -f 2 | cut -d '"' -f 2)
-      id: release
+      id: release_tag
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
