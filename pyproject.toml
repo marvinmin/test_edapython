@@ -2,7 +2,10 @@
 name = "eda_analysis"
 version = "0.1.0"
 description = "Conduct inital EDA analysis for exploring data in a dataframe."
-authors = ["sweber15 <sarah.weber@live.ca>"]
+authors = ["sweber15 <sarah.weber@live.ca>",
+           "v5y8 <jamesliu1991@gmail.com>",
+            "sgauravm <sgauravm@github.com>",
+            "marvinmin <marvinmin@github.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
