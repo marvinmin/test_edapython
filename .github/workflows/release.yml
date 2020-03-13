@@ -45,7 +45,7 @@ jobs:
       uses: benjefferies/branch-protection-bot@master
       if: always()
       with:
-          access-token: ${{ secrets.ACCESS_TOKEN }}
+        access-token: ${{ secrets.ACCESS_TOKEN }}
     - name: Bump package versions
       run: |
         git config --local user.email "action@github.com"
