@@ -7,6 +7,16 @@ authors = ["sweber15 <sarah.weber@live.ca>",
             "sgauravm <sgauravm@github.com>",
             "marvinmin <marvinmin@github.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/UBC-MDS/edapython"
+repository = "https://github.com/UBC-MDS/edapython"
+documentation = 'https://edapython.readthedocs.io/'
+
+[tool.semantic_release]
+version_variable = "eda_analysis/__init__.py:__version__"
+version_source = "commit"
+upload_to_pypi = "false"
+patch_without_tag = "true"
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -21,6 +31,7 @@ sphinx = "^2.4.4"
 sphinxcontrib-napoleon = "^0.7"
 flake8 = "^3.7.9"
 codecov = "^2.0.16"
+python-semantic-release = "^4.10.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
