@@ -1,4 +1,4 @@
-<img src="img/logo.png" width="120" align = "right">
+<img src="https://github.com/marvinmin/test_edapython/blob/master/img/logo.png" width="120" align = "right">
 
 # A Package for Exploratory Data Analysis (eda_analysis)
 
@@ -19,7 +19,7 @@ This package helps in the EDA process of data analysis. There are other similar 
 ### Installation:
 
 ```
-pip install -i https://test.pypi.org/simple/ eda_analysis
+pip install -i https://test.pypi.org/simple/ t_eda_analysis
 ```
 
 ### Features
@@ -36,13 +36,13 @@ pip install -i https://test.pypi.org/simple/ eda_analysis
 - pandas = ^1.0.1
 - numpy = ^1.18.1
 - altair = ^3.2.0
-- IPython = ^7.13.0
+- IPython = 7.13.0
 
 ### Usage
 
 To use eda_analysis in a project::
 
-    from eda_analysis import eda_analysis
+    from eda_analysis import t_eda_analysis
     
 Visit our [read the docs page](https://edapython.readthedocs.io/en/latest/source/eda_analysis.html#module-eda_analysis) to see individual function usage.
 
