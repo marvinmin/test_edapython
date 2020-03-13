@@ -35,11 +35,8 @@ pip install -i https://test.pypi.org/simple/ eda_analysis
 - python = ^3.7
 - pandas = ^1.0.1
 - numpy = ^1.18.1
-- altair = ^4.0.1
-- pytest-cov = ^2.8.1
-- sphinx = ^2.4.4
-- sphinxcontrib-napoleon = ^0.7
-- poetry>=0.12
+- altair = ^3.2.0
+- IPython = ^7.13.0
 
 ### Usage
 
