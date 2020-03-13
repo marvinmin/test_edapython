@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "t_eda_analysis"
-version = "0.1.9"
+version = "0.1.10"
 description = "Conduct inital EDA analysis for exploring data in a dataframe."
 authors = ["sweber15 <sarah.weber@live.ca>",
            "v5y8 <jamesliu1991@gmail.com>",
