@@ -43,24 +43,17 @@ def generate_report(dataframe, cat_vars, num_vars):
         print("Number of NA values in each column")
         print(na_report)
 
-        print(' ')
-        print('Categorical variable histogram')
         cat_var_plot = describe_cat_var(dataframe, cat_vars)
-        cat_var_plot.display()
-
         num_var_desc, num_var_plot = describe_num_var(dataframe, num_vars)
-        print(' ')
-        print('Numerical variable histogram')
-        num_var_plot.display()
 
         print(' ')
         print('Numerical variable summary')
         print(num_var_desc)
 
         print(' ')
-        print('Correlation plot of numerical variable')
+        print('Categorical/Numerical variable histogram and Correlation plot of numerical variable:')
         cor_plot = calc_cor(dataframe, num_vars)
-        cor_plot.display()
+        cat_var_plot & num_var_plot & cor_plot
 
         return True
 
